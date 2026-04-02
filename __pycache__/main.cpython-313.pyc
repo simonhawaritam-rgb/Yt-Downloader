@@ -1,0 +1,63 @@
+�
+6.�i����SSKJrJrJrJr SSKJr SSKrSSSSK     r       \"\
+5r
+  \"\
+     5 \        RR5(d'\"SS5rR "SS0\5 SSS5 \
+                                           R#5S 5r\
+                                                   R#S
+5S
+  5r\
+     R#S
+/S9S5r\ S
+       R#SS/S9S5r\
+S:Xa\
+     R-SSS9 gg!,(df   N�=f)�)�Flask�request�jsonify�send_from_directory)�CORSN�
+                         config.json�w�titlezRACK FF | NEURAL CORE�/c��[SS5$)N�.zYt.html)r���6/data/data/com.termux/files/home/my-downloader/main.py�indexrs��
+                                                  �s�I�
+ .�.rz
+Cache-Control)r�headers)responses r�r
+�6�H�(2�H���_�%��3�
+/update_title�POST)�methodsc��[R"5nURS5n[SS5nR
+SU35 [SS05$!,(df   N)=f)Nr
+r       z [!] SAVED TITLE TO config.json: �successTrget_json�get�open�json�dump�printr)�data� new_title�fs   r�
+   update_titler#sk��
+                     �
+                      �
+                       �
+�m�S�   !�Q�            �D���!�I�
+           �    �       �7�I�&�*�
+"�      �
+         ,�Y�K�
+8�9�
+    �I�t�$�
+           %�%�
+"�      !�s
+           �A0�0
+A>z     /download�GET��[RRS5nU(d[SSS.5S4$R
+USS.5nUR9n[SURS5URS
+5S
+  .5sSSS5 $!,(df   g=f![a#n[S[U5S.5S
+N�urlFzNo URL provided)r�errori��bestT)�format�quietdownloadr
+)r�     video_urlr
+i�)     r�argsr�yt_dlp� YoutubeDL�
+                                  extract_info� Exception�str)r&�ydl�info�es    rr+r+#s���
+�,�,�
+�
+�5�
+!�C�
+@����#�#�C�%�#�8�D��t�$�(�(�5�/�TX�T\�T\�]d�Te��g�A�
+   �A��5�3�q�6�:�;�S�@@��A�s;�B)�=B�    B)�
+B&�"B)�&B)�)
+C�3C�
+     C�C__main__z0.0.0.0i@)�host�port)�flaskrrrr�
+flask_corsrr.r�os__name__�app�path�existsrr"r�routerrr#r+�runrrr<module>rBs
+�                    ��>�>��
+ �      �
+         �H�o���S�      �
+�m�S�~�~!�Q��$�
+           �    �       �7�3�4�a8�
+"����3��/��/����>�����
+                      ���?�V�H��-�&�.�&����;����(�   A�)�     A�
+          �z���G�G���G�&��G
+"�      !�s
+           �C*�*
