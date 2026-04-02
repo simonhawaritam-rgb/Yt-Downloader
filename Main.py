@@ -1,48 +1,53 @@
-from flask import Flask, request, jsonify, send_from_directory
+import os
+import json
+from flask import Flask, render_template, request, send_file, jsonify
 from flask_cors import CORS
 import yt_dlp
-import json
-import os
 
 app = Flask(__name__)
 CORS(app)
 
-# Ensure config.json exists
-if not os.path.exists('config.json'):
-    with open('config.json', 'w') as f:
-        json.dump({"title": "RACK FF | NEURAL CORE"}, f)
+# Load your custom config (RACK FF | NEURAL CORE)
+def load_config():
+    try:
+        with open('config.json', 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {"title": "YouTube Downloader", "version": "1.0"}
 
 @app.route('/')
 def index():
-    return send_from_directory('.', 'Yt.html')
+    config = load_config()
+    return render_template('yt.html', config=config)
 
-@app.route('/config.json')
-def get_config():
-    # Force no-cache so browsers don't hold onto the old title
-    response = send_from_directory('.', 'config.json')
-    response.headers['Cache-Control'] = 'no-store'
-    return response
+@app.route('/download', methods=['POST'])
+def download_video():
+    data = request.json
+    video_url = data.get('url')
+    
+    if not video_url:
+        return jsonify({"error": "No URL provided"}), 400
 
-@app.route('/update_title', methods=['POST'])
-def update_title():
-    data = request.get_json()
-    new_title = data.get('title')
-    with open('config.json', 'w') as f:
-        json.dump({"title": new_title}, f)
-    print(f"[!] SAVED TITLE TO config.json: {new_title}") # Watch your terminal for this!
-    return jsonify({"success": True})
+    # Temporary download path (Railway files are temporary)
+    output_path = '/tmp/%(title)s.%(ext)s'
 
-@app.route('/download', methods=['GET'])
-def download():
-    url = request.args.get('url')
-    if not url:
-        return jsonify({"success": False, "error": "No URL provided"}), 400
+    ydl_opts = {
+        'format': 'best',
+        'outtmpl': output_path,
+        'noplaylist': True,
+    }
+
     try:
-        with yt_dlp.YoutubeDL({'format': 'best', 'quiet': True}) as ydl:
-            info = ydl.extract_info(url, download=False)
-            return jsonify({"success": True, "video_url": info.get('url'), "title": info.get('title')})
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(video_url, download=True)
+            file_path = ydl.prepare_filename(info)
+            
+            # Send file to user and then cleanup (optional)
+            return send_file(file_path, as_attachment=True)
     except Exception as e:
-        return jsonify({"success": False, "error": str(e)}), 500
+        return jsonify({"error": str(e)}), 500
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000)
+if __name__ == "__main__":
+    # CRITICAL: Railway provides the port via an environment variable
+    port = int(os.environ.get("PORT", 8000))
+    app.run(host='0.0.0.0', port=port)
